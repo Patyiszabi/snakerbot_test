@@ -1,0 +1,33 @@
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Environment variables and secrets
+.env
+*.env
+
+# Logs and runtime files
+*.log
+*.pid
+*.sock
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Virtual environment
+venv/
+ENV/
+
+# IDE-specific files
+.idea/
+.vscode/
+
+# Selenium-specific files
+selenium-screenshot.png
+
+# Other
+*.tmp
+*.bak
+*.swp
