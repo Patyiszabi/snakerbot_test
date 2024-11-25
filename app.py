@@ -5,15 +5,17 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 import requests
 import os
 
 # Selenium beállítások
 chrome_options = Options()
-chrome_options.add_argument("--headless")  # Futtatás fej nélkül, hogy ne nyíljon meg a böngésző
 chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--enable-unsafe-swiftshader")  # WebGL fallback opció
+chrome_options.add_argument("--disable-software-rasterizer")  # GPU render problémák elkerülése
 chrome_options.add_argument("--start-maximized")  # Teljes méretű ablak indítása
 
 # Proxy hozzáadása
@@ -21,18 +23,16 @@ proxy = os.getenv("PROXY_ADDRESS")  # A proxy cím betöltése környezeti vált
 if proxy:
     chrome_options.add_argument(f"--proxy-server={proxy}")
 
-# ChromeDriver útvonala
-service = Service("/path/to/chromedriver")  # Ezt cseréld le a saját ChromeDriver útvonaladra
 
 # CAPTCHA megoldó API kulcs
 captcha_api_key = os.getenv("CAPTCHA_API_KEY")  # 2Captcha API kulcs betöltése környezeti változóból
 
 # Böngésző indítása
-browser = webdriver.Chrome(service=service, options=chrome_options)
+browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 try:
     # Lépj be az adott weboldalra
-    url = "https://example-sneaker-shop.com"  # Cseréld le a valós sneaker bolt URL-jére
+    url = "https://www.nike.com/hu/t/air-jordan-1-low-se-cipo-KkNJHB/HJ7743-010"  # Cseréld le a valós sneaker bolt URL-jére
     browser.get(url)
 
     # Várd meg, hogy a keresőmező betöltődjön
@@ -40,7 +40,7 @@ try:
     search_box = wait.until(EC.presence_of_element_located((By.NAME, "search")))  # Testreszabás szükséges
 
     # Keresés indítása
-    sneaker_name = "Air Jordan 1"  # Cseréld le a keresett cipő nevére
+    sneaker_name = "Air Jordan 1 Low SE"  # Cseréld le a keresett cipő nevére
     search_box.send_keys(sneaker_name)
     search_box.send_keys(Keys.RETURN)
 
